@@ -12,7 +12,7 @@ export default function LiveCamera({
 
   const [cameraOn, setCameraOn] = useState(false);
   const [loading, setLoading] = useState(false);
-
+const [facingMode, setFacingMode] = useState("user");
 
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export default function LiveCamera({
     prev === "user" ? "environment" : "user"
   );
 };
-const [facingMode, setFacingMode] = useState("user");
+
   const stopCamera = () => {
     const stream = videoRef.current?.srcObject;
 
@@ -108,31 +108,18 @@ const [facingMode, setFacingMode] = useState("user");
 
       </div>
 <div className="grid grid-cols-2 gap-3">
-      <button
-        onClick={takePhoto}
-        className="w-full bg-red-600 text-white py-3 rounded-xl font-bold"
-      >
-        {loading ? "⏳ Memproses AI..." : "📸 Ambil Foto"}
-      </button>
-      <button
-  onClick={switchCamera}
-  className="w-full bg-blue-600 text-white py-3 rounded-xl font-bold"
->
-  🔄 Ganti Kamera
-</button>
- <button
-    onClick={cameraOn ? stopCamera : startCamera}
-    className={`py-3 rounded-xl font-bold text-white ${
-      cameraOn ? "bg-gray-700" : "bg-green-600"
-    }`}
-  >
-    {cameraOn ? "⏹ Stop Camera" : "▶️ Open Camera  "}
+  <button>📸 Ambil Foto</button>
+  <button>🔄 Ganti Kamera</button>
+
+  <button className="col-span-2">
+    {cameraOn ? "⏹ Stop Camera" : "▶️ Open Camera"}
   </button>
+</div>
       <canvas
         ref={canvasRef}
         className="hidden"
       />
 </div>
-    </div>
+    
   );
 }
