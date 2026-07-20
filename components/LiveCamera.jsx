@@ -19,13 +19,13 @@ export default function LiveCamera({
     startCamera();
 
     return () => stopCamera();
-  }, []);
+  }, [facingMode]);
 
   const startCamera = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
-          facingMode: "user",
+          facingMode,
         },
         audio: false,
       });
@@ -39,6 +39,14 @@ export default function LiveCamera({
     }
   };
 
+  const switchCamera = async () => {
+  stopCamera();
+
+  setFacingMode((prev) =>
+    prev === "user" ? "environment" : "user"
+  );
+};
+const [facingMode, setFacingMode] = useState("user");
   const stopCamera = () => {
     const stream = videoRef.current?.srcObject;
 
@@ -106,6 +114,12 @@ export default function LiveCamera({
       >
         {loading ? "⏳ Memproses AI..." : "📸 Ambil Foto"}
       </button>
+      <button
+  onClick={switchCamera}
+  className="w-full bg-blue-600 text-white py-3 rounded-xl font-bold"
+>
+  🔄 Ganti Kamera
+</button>
  <button
     onClick={cameraOn ? stopCamera : startCamera}
     className={`py-3 rounded-xl font-bold text-white ${
