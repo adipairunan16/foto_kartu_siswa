@@ -27,25 +27,7 @@ export default function StudentForm({ student, setStudent }) {
         />
       </div>
 
-      {/* NIS */}
-      <div className="mb-5">
-        <label className="block text-sm font-semibold mb-2">
-          NIS
-        </label>
-
-        <input
-          type="text"
-          value={student.nis}
-          onChange={(e) =>
-            setStudent({
-              ...student,
-              nis: e.target.value,
-            })
-          }
-          placeholder="Nomor Induk Siswa"
-          className="w-full border rounded-xl p-3 outline-none focus:ring-2 focus:ring-red-500"
-        />
-      </div>
+     
 
       {/* Kelas */}
       <div className="mb-5">
@@ -53,21 +35,18 @@ export default function StudentForm({ student, setStudent }) {
           Kelas
         </label>
 
-        <select
-          value={student.kelas}
-          onChange={(e) =>
-            setStudent({
-              ...student,
-              kelas: e.target.value,
-            })
-          }
-          className="w-full border rounded-xl p-3 outline-none focus:ring-2 focus:ring-red-500"
-        >
-          <option value="">Pilih Kelas</option>
-          <option value="X TKJ">X TKJ</option>
-          <option value="XI TKJ">XI TKJ</option>
-          <option value="XII TKJ">XII TKJ</option>
-        </select>
+        <input
+  type="text"
+  value={student.kelas}
+  onChange={(e) =>
+    setStudent({
+      ...student,
+      kelas: e.target.value.toUpperCase(),
+    })
+  }
+  placeholder="Contoh: XI TKJ 1"
+  className="w-full border rounded-xl p-3 outline-none focus:ring-2 focus:ring-red-500"
+/>
       </div>
 
       <div className="bg-gray-100 rounded-xl p-4 mb-6">

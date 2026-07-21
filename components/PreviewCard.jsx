@@ -8,46 +8,74 @@ export default function PreviewCard({
 }) {
   const [uploading, setUploading] = useState(false);
 
-  async function savePhoto() {
-    if (!student?.photo) {
-      alert("Belum ada foto");
-      return;
-    }
+async function savePhoto() {
+  if (!student?.photo) {
+    alert("Belum ada foto");
+    return;
+  }
 
-    try {
-      setUploading(true);
+  setUploading(true);
 
-      const res = await fetch("/api/upload", {
+  try {
+    // Upload pertama
+    let response = await fetch("/api/upload", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...student,
+        replace: false,
+      }),
+    });
+
+    let data = await response.json();
+
+    // Jika foto sudah ada
+    if (data.exists) {
+      const ok = window.confirm(
+        "Foto siswa ini sudah ada.\n\nApakah ingin menggantinya?"
+      );
+
+      if (!ok) {
+        return;
+      }
+
+      response = await fetch("/api/upload", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(student),
+        body: JSON.stringify({
+          ...student,
+          replace: true,
+        }),
       });
 
-      const result = await res.json();
-
-      if (!result.success) {
-        throw new Error(result.message);
-      }
-
-      alert("✅ Foto berhasil disimpan ke Google Drive");
-
-      // Kosongkan preview
-      setStudent((prev) => ({
-        ...prev,
-        photo: "",
-      }));
-
-    } catch (err) {
-      console.error(err);
-      alert("❌ " + err.message);
-    } finally {
-      setUploading(false);
+      data = await response.json();
     }
-  }
 
-  return (
+    if (!data.success) {
+      throw new Error(data.message || "Upload gagal");
+    }
+
+   alert("✅ Foto berhasil disimpan");
+
+setStudent({
+  nama: "",
+  
+  kelas: "",
+  photo: null,
+});
+  } catch (err) {
+    console.error(err);
+    alert("❌ " + err.message);
+  } finally {
+    setUploading(false);
+  }
+}
+
+    return (
     <div className="bg-white rounded-2xl shadow-lg p-6">
 
       <h2 className="text-xl font-bold mb-6">
@@ -74,7 +102,7 @@ export default function PreviewCard({
 
         <p><b>Nama :</b> {student?.nama || "-"}</p>
 
-        <p><b>NIS :</b> {student?.nis || "-"}</p>
+       
 
         <p><b>Kelas :</b> {student?.kelas || "-"}</p>
 
